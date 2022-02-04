@@ -1,0 +1,68 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+  PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+  "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+  <mapper namespace="com.test.mapper.Room_infoMapper">
+  
+  <select id="getTotalCount" resultType="int">
+  	select count(no) from "room_Info" where no > 0	delete_flag = '1'
+  </select>
+  
+  <select id="getList" resultType="com.test.domain.Room_infoVO">
+  <![CDATA[
+  select * from "room_Info" where no > 0 and delete_flag = '1'
+  ]]>
+  </select>
+  
+  <select id="getListWithPaging" resultType="com.test.domain.Room_infoVO">
+  	<![CDATA[
+  	 select *
+  	 from(select row_number() over(order by no desc) as rnum
+  	 	,room_num, room_title, max, adult_cost, child_cost, images from "room_Info" where delete_flag = '1') as foo
+  	 	offset (#{pageNum} - 1 ) * 10 limit #{amount}
+  	]]>
+  </select>
+  
+  <insert id="insert">
+  	insert into "room_Info" (room_num, room_title, max, adult_cost, child_cost,
+  	explanation, images, color_code, delete_flag, created_at, updated_at, build_code)
+  	values (#{room_num}, #{room_title}, #{max}, #{adult_cost}, #{child_cost},
+  	#{explanation}, #{images}, #{color_code}, #{delete_flag}, now(), now(), #{build_code})
+  </insert>
+  
+  <insert id="insertSelectKey">
+  	<selectKey keyProperty="no" order="BEFORE"
+  		resultType="int">
+  		select seq_room_info.nextval from dual
+  		</selectKey>
+  		insert into "room_Info" (room_num, room_title, max, adult_cost, child_cost,
+  	explanation, images, color_code, delete_flag, created_at, updated_at, build_code)
+  	values (#{room_num}, #{room_title}, #{max}, #{adult_cost}, #{child_cost},
+  	#{explanation}, #{images}, #{color_code}, #{delete_flag}, now(), now(), #{build_code})
+  </insert>
+  
+  <select id="read" resultType="com.test.domain.Room_infoVO">
+  		select * from "room_Info" where no = #{no}
+  	</select>
+  	
+  	<update id="delete">
+  		update "room_Info" 
+  		set delete_flag = '1'
+  		where no = #{no}
+  	</update>
+  	
+  	<update id="update">
+  		update "room_Info"
+  		set room_num= #{room_num},
+  		room_title= #{room_title},
+  		max= #{max},
+  		adult_cost= #{adult_cost},
+  		child_cost= #{child_cost},
+  		explanation= #{explanation},
+  		images= #{images},
+  		color_code= #{color_code},
+  		delete_flag= #{delete_flag},
+  		updated_at= now()
+  		where no = #{no}
+  	</update>
+  </mapper>

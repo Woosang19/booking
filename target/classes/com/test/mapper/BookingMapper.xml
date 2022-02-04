@@ -1,0 +1,73 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+  PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+  "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+  <mapper namespace="com.test.mapper.BookingMapper">
+  
+  
+  <select id="getList" resultType="com.test.domain.BookingVO">
+  <![CDATA[
+  select * from booking where no > 0
+  ]]>
+  </select>
+  
+  <select id="getListWithPaging" resultType="com.test.domain.BookingVO">
+  	<![CDATA[
+  	 select *
+  	 from 
+  	 (select row_number() over(order by no desc) as rnum
+  	 	name from notice) as foo
+  	 offset (#{pageNum} - 1 ) * 10 limit #{amount}
+  	]]>
+  </select>
+  
+  <insert id="insert">
+  	insert into booking (room_no, name, phone, adult, child, start_date, 
+  	end_date, payment_flag, total_cost, cancel_flag, 
+  	bank_name, delete_flag, created_at, updated_at, build_code)
+  	values (#{room_no}, #{name}, #{phone}, #{adult}, #{child}, #{start_date},
+  	#{end_date}, #{payment_flag}, #{total_cost}, #{cancel_flag},
+  	#{bank_name}, #{delete_flag}, now(), now(), #{build_code})
+  </insert>
+  
+  <insert id="insertSelectKey">
+  	<selectKey keyProperty="no" order="BEFORE"
+  		resultType="int">
+  		select seq_booking.nextval from dual
+  	</selectKey>
+  		insert into booking (no, room_no, name, phone, adult, child, start_date, 
+  		end_date, payment_flag, total_cost, cancel_flag, 
+  		bank_name, delete_flag, created_at, updated_at, build_code)
+  		values (#{no}, #{room_no}, #{name}, #{phone}, #{adult}, #{child}, #{start_date},
+  		#{end_date}, #{payment_flag}, #{total_cost}. #{cancel_flag},
+  		#{bank_name}, #{delete_flag}, now(), now(), #{build_code})
+  </insert>
+  
+  <select id="read" resultType="com.test.domain.BookingVO">
+  		select * from booking where no = #{no}
+  </select>
+  
+  <delete id ="delete">
+  		delete form booking where no = #{no}
+  </delete>
+  
+  <update id ="update">
+  		update booking
+  		set no = #{no},
+  		room_no = #{room_no},
+  		name = #{name},
+  		phone = #{phone},
+  		adult = #{adult},
+  		child = #{child},
+  		start_date = #{start_date},
+  		end_date = #{end_date},
+  		payment_flag = #{payment_flag},
+  		total_cost = #{total_cost},
+  		cancel_flag = #{cancel_flag},
+  		bank_name = #{bank_name},
+  		delete_flag = #{delete_flag},
+  		updated_at = now(),
+  		build_code = #{build_code}
+  		where no = #{no}
+  </update>
+ </mapper>

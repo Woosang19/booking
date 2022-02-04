@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE tiles-definitions PUBLIC
+  "-//Apache Software Foundation//DTD Tiles Configuration 2.1//EN"
+  "http://tiles.apache.org/dtds/tiles-config_2_1.dtd">
+<tiles-definitions>
+    <definition name="biz-template" template="/WEB-INF/tiles/layouts/biz_template.jsp">
+    	<put-attribute name="title" value="Mokaboard 메인페이지" />
+        <put-attribute name="header" value="/WEB-INF/tiles/components/biz/header.jsp" />
+        <put-attribute name="left-side" value="/WEB-INF/tiles/components/biz/left-side.jsp" />
+        <put-attribute name="footer" value="/WEB-INF/tiles/components/biz/footer.jsp" />
+    </definition>
+    <definition name="biz/*" extends="biz-template">
+        <put-attribute name="content" value="/WEB-INF/views/{1}.jsp" />
+    </definition>
+    <definition name="biz/*/*" extends="biz-template">
+        <put-attribute name="content" value="/WEB-INF/views/{1}/{2}.jsp" />
+    </definition>
+    
+     <definition name="sample-template" template="/WEB-INF/tiles/layouts/biz_template.jsp">
+    	<put-attribute name="title" value="sample 메인페이지" />
+        <put-attribute name="header" value="/WEB-INF/tiles/components/biz/header.jsp" />
+        <put-attribute name="left-side" value="/WEB-INF/tiles/components/sample/left-side.jsp" />
+        <put-attribute name="footer" value="/WEB-INF/tiles/components/biz/footer.jsp" />
+    </definition>
+    <definition name="sample-t/*" extends="sample-template">
+        <put-attribute name="content" value="/WEB-INF /views/sample/{1}.jsp" cascade="true" />
+    </definition>
+    <definition name="sample-t/*/*" extends="sample-template">
+        <put-attribute name="content" value="/WEB-INF/views/sample/{1}/{2}.jsp" cascade="true" />
+    </definition>
+</tiles-definitions>
